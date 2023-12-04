@@ -2,7 +2,12 @@ import java.io.File
 
 data class BallRound(val color: String, val count: Int)
 
-data class Game(val gameId: Int, val rounds: List<List<BallRound>>)
+data class Game(val gameId: Int, val rounds: List<List<BallRound>>) {
+    private val minRedCount = rounds.flatten().filter { it.color == "red" }.maxOfOrNull { it.count } ?: 0
+    private val minGreenCount = rounds.flatten().filter { it.color == "green" }.maxOfOrNull { it.count } ?: 0
+    private val minBlueCount = rounds.flatten().filter { it.color == "blue" }.maxOfOrNull { it.count } ?: 0
+    val power = minRedCount * minGreenCount * minBlueCount
+}
 
 fun main() {
     val fileName = "input.txt" // Replace with the actual file name
@@ -42,6 +47,8 @@ fun main() {
     }
 
     val sumOfValidGameIds = validGames.sumOf { it.gameId }
+    val sumOfGamePower = games.sumOf { it.power }
 
     println("Sum of Game IDs for valid games: $sumOfValidGameIds")
+    println("Sum of Game Power: $sumOfGamePower")
 }
